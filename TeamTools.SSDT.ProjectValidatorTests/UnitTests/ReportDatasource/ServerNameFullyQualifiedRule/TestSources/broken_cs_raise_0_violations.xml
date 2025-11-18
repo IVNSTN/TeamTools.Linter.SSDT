@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RptDataSource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="my_srv.reporting_database">
+  <ConnectionProperties>
+    <Extension>SQL</Extension>
+    <ConnectString>Data my_srv;Initial Catalog>reporting_database</ConnectString>
+  </ConnectionProperties>
+</RptDataSource>

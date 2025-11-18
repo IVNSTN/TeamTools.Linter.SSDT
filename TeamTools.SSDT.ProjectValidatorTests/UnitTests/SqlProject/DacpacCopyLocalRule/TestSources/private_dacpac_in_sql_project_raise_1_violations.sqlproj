@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>db</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql150DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Build Include="Service Broker\Contracts\prefix_MainEntities_contract_L21g.sql" />
+    <None Include="Publish\db.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ArtifactReference Include="..\..\_DACPACs\frontend.dacpac">
+      <HintPath>..\..\_DACPACs\frontend.dacpac</HintPath>
+      <SuppressMissingDependenciesErrors>True</SuppressMissingDependenciesErrors>
+      <DatabaseSqlCmdVariable>frontend</DatabaseSqlCmdVariable>
+      <Private>True</Private> <!-- 1 -->
+    </ArtifactReference>
+  </ItemGroup>
+</Project>

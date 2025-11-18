@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net6.0;net8.0</TargetFrameworks>
+    <OutputType>Library</OutputType>
+    <Configurations>Debug;Release</Configurations>
+  </PropertyGroup>
+
+  <!-- Packing options -->
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <PackageOutputPath>../.nupkg</PackageOutputPath>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>./readme.md</PackageReadmeFile>
+    <PackageTags>SSDT;sqlproj;StaticCodeAnalysis;CodeQuality;TeamTools</PackageTags>
+    <Description>Pluggable SSDT-style project configuration validator</Description>
+  </PropertyGroup>
+
+  <!-- Dependencies -->
+  <ItemGroup>
+    <ProjectReference Include="..\TeamTools.TSQL.Common\TeamTools.Common.Linting.csproj" />
+  </ItemGroup>
+
+  <!-- Manual includes -->
+  <ItemGroup>
+    <Content Include="..\LICENSE" Pack="true" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="DefaultConfig.json" Pack="true" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Resources\ViolationMessages.ru-ru.json" Pack="true" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Resources\ViolationMessages.json" Pack="true" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Resources\Docs\**" Condition="'$(ExcludeDocs)'!='true'">
+      <Link>Resources\Docs\%(RecursiveDir)%(FileName)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>true</Visible>
+      <Pack>true</Pack>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\Strings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Strings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

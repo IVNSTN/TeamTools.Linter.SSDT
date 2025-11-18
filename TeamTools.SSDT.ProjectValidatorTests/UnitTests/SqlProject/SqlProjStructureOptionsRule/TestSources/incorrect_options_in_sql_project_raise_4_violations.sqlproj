@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>db</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql150DatabaseSchemaProvider</DSP>
+    <DefaultFileStructure>BySchemaAndObjectType</DefaultFileStructure> <!-- 1 -->
+    <IncludeSchemaNameInFileName>False</IncludeSchemaNameInFileName> <!-- 2 -->
+    <!-- missing is not ok too OutputType>Database</OutputType--> <!-- 3 -->
+    <!-- missing is not ok too DeployToDatabase>False</DeployToDatabase--> <!-- 4 -->
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>.\bin\Release\</OutputPath> <!-- here -->
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Build Include="Tables\MyTable.sql" />
+    <None Include="Publish\DB.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ArtifactReference Include="..\..\_DACPACs\frontend.dacpac">
+      <HintPath>..\..\_DACPACs\frontend.dacpac</HintPath>
+      <SuppressMissingDependenciesErrors>True</SuppressMissingDependenciesErrors>
+      <DatabaseSqlCmdVariable>frontend</DatabaseSqlCmdVariable>
+    </ArtifactReference>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,37 @@
+﻿{
+    "messages": {
+        "SSDT0001:PROJECT_DUP_INCLUDE": "Дублирующееся включение в проект",
+        "SSDT0002:PROJECT_FOLDER_DANGLING_FILE": "Файл не включен в проект",
+        "SSDT0003:DACPAC_WARNING_SUPPRESSED": "Не заблокированы ошибки зависимостей подключенных проектов",
+        "SSDT0004:DACPAC_HINT_PATH": "Неправильный путь в HintPath",
+        "SSDT0005:DACPAC_COPY_LOCAL": "Свойство CopyLocal/Private не требует явного указания True",
+        "SSDT0006:SQL_PROJECT_STRUCT_OPTIONS": "Некорректно заданы опции, определяющие структуру проекта",
+        "SSDT0007:SQL_PROJECT_OBSOLETE_OPTIONS": "Использование устаревших опций проекта",
+        "SSDT0008:SQL_PROJECT_CURSOR_OPTIONS": "Задана некорректная область действия курсоров",
+        "SSDT0009:PROJECT_INCLUDE_ABSOLUTE_PATH": "Используется абсолютный путь",
+        "SSDT0010:PUBLISH_XML_VARIABLE_MISSING": "Переменная из файла проекта не добавлена в publish.xml",
+
+        "RDL0001:EMBEDDED_IMAGES": "Встраивание изображений в отчет",
+        "RDL0002:INTEGRATED_SECURITY_OFF": "Некорректное значение опции IntegratedSecurity",
+        "RDL0003:CONNECTION_STRING_ILLEGAL": "Определение строки подключения в отчёте",
+        "RDL0004:DATASET_NAME_LENGTH": "Слишком короткое имя набора данных",
+        "RDL0005:DATASET_NAME_ALLOWED_SYMBOLS": "Недопустимый символ в имени набора данных",
+        "RDL0006:DATASET_NAME_NODEFAULT": "Автоматически сгенерированное имя набора данных",
+        "RDL0007:DATASOURCE_NAME_LENGTH": "Слишком короткое имя источника данных",
+        "RDL0008:DATASOURCE_NAME_ALLOWED_SYMBOLS": "Недопустимый символ в имени источника данных",
+        "RDL0009:DATASOURCE_NAME_NODEFAULT": "Автоматически сгенерированное имя источника данных",
+        "RDL0010:UNUSED_DATASOURCE": "Неиспользуемый источник данных",
+        "RDL0011:UNRESOLVED_DATASOURCE_REFERENCE": "Ссылка на неизвестный источник данных",
+        "RDL0012:UNUSED_DATASET": "Неиспользуемый набор данных",
+        "RDL0013:UNRESOLVED_DATASET_REFERENCE": "Ссылка на неизвестный набор данных",
+        "RDL0014:UNUSED_PARAMETER": "Неиспользуемый параметр",
+
+        "RDS0001:SERVER_LINK_FULLY_QUALIFIED": "Имя сервера не полностью определено",
+        "RDS0002:INTEGRATED_SECURITY_VALUE": "Недопустимое значение опции IntegratedSecurity",
+        "RDS0003:CONNECTION_STRING_UNDEFINED": "Не задана строка подключения",
+        "RDS0004:DATASOURCE_NAME_LENGTH": "Слишком короткое имя источника данных",
+        "RDS0005:DATASOURCE_NAME_ALLOWED_SYMBOLS": "Недопустимый символ в имени источника данных",
+        "RDS0006:DATASOURCE_NAME_NODEFAULT": "Автоматически сгенерированное имя источника данных",
+        "RDS0007:DATASOURCE_NAME_TEMPLATE": "Имя источника данных не соответствует шаблону"
+    }
+}

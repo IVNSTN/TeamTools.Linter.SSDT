@@ -1,0 +1,51 @@
+﻿{
+    "FileTypes": {
+        "SQL": [
+            ".sqlproj"
+        ],
+        "REPORT": [
+            ".rptproj"
+        ],
+        "ReportDesign": [
+            ".rdl"
+        ],
+        "ReportDatasource": [
+            ".rds"
+        ]
+    },
+    "rules": {
+        "SSDT0001:PROJECT_DUP_INCLUDE": "warning",
+        "SSDT0002:PROJECT_FOLDER_DANGLING_FILE": "warning",
+        "SSDT0003:DACPAC_WARNING_SUPPRESSED": "warning",
+        "SSDT0004:DACPAC_HINT_PATH": "warning",
+        "SSDT0005:DACPAC_COPY_LOCAL": "warning",
+        "SSDT0006:SQL_PROJECT_STRUCT_OPTIONS": "warning",
+        "SSDT0007:SQL_PROJECT_OBSOLETE_OPTIONS": "warning",
+        "SSDT0008:SQL_PROJECT_CURSOR_OPTIONS": "warning",
+        "SSDT0009:PROJECT_INCLUDE_ABSOLUTE_PATH": "warning",
+        "SSDT0010:PUBLISH_XML_VARIABLE_MISSING": "warning",
+
+        "RDL0001:EMBEDDED_IMAGES": "warning",
+        "RDL0002:INTEGRATED_SECURITY_OFF": "hint",
+        "RDL0003:CONNECTION_STRING_ILLEGAL": "warning",
+        "RDL0004:DATASET_NAME_LENGTH": "hint",
+        "RDL0005:DATASET_NAME_ALLOWED_SYMBOLS": "warning",
+        "RDL0006:DATASET_NAME_NODEFAULT": "warning",
+        "RDL0007:DATASOURCE_NAME_LENGTH": "hint",
+        "RDL0008:DATASOURCE_NAME_ALLOWED_SYMBOLS": "warning",
+        "RDL0009:DATASOURCE_NAME_NODEFAULT": "warning",
+        "RDL0010:UNUSED_DATASOURCE": "hint",
+        "RDL0011:UNRESOLVED_DATASOURCE_REFERENCE": "error",
+        "RDL0012:UNUSED_DATASET": "hint",
+        "RDL0013:UNRESOLVED_DATASET_REFERENCE": "error",
+        "RDL0014:UNUSED_PARAMETER": "hint",
+
+        "RDS0001:SERVER_LINK_FULLY_QUALIFIED": "warning",
+        "RDS0002:INTEGRATED_SECURITY_VALUE": "hint",
+        "RDS0003:CONNECTION_STRING_UNDEFINED": "error",
+        "RDS0004:DATASOURCE_NAME_LENGTH": "hint",
+        "RDS0005:DATASOURCE_NAME_ALLOWED_SYMBOLS": "warning",
+        "RDS0006:DATASOURCE_NAME_NODEFAULT": "warning",
+        "RDS0007:DATASOURCE_NAME_TEMPLATE": "hint"
+    }
+}
