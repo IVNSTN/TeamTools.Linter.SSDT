@@ -51,7 +51,7 @@ jobs:
     - name: Set version in all AssemblyInfo.cs files
       uses: secondbounce/assemblyinfo-update@v2
       with:
-        version: ${{ VERSION }}
+        version: ${VERSION}
 
     - name: Cache NuGet packages
       uses: actions/cache@v4
