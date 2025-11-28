@@ -35,6 +35,7 @@ jobs:
       uses: codacy/git-version@2.7.1
       with:
         release-branch: main
+        prefix: v
 
     - name: Set version in all AssemblyInfo.cs files
       uses: secondbounce/assemblyinfo-update@v2
