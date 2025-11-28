@@ -125,8 +125,8 @@ jobs:
         gistID: ${{ vars.GIST_COVERAGE_ID }}
         filename: teamtools-linter-ssdt-rules-count.svg
         label: Code analysis rules
-        message: ${{ vars.CODE_ANALYSIS_RULES_COUNT }}%
-        color: blue
+        message: ${{ vars.CODE_ANALYSIS_RULES_COUNT }}
+        color: red
 
     - name: Print code coverage
       if: steps.create_coverage_badge.outcome == 'success'
