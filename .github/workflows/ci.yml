@@ -86,7 +86,11 @@ jobs:
       run: dotnet build --no-restore --configuration ${{ matrix.configuration }} --p:ContinuousIntegrationBuild=true --p:GenerateAssemblyInfo=false
 
     - name: Test
-      run: dotnet test --configuration ${{ matrix.configuration }} --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=../TestResults/ -p:CoverletOutputFormat=opencover --logger "trx;LogFileName=test-results.trx"
+      run: |
+        dotnet test --configuration ${{ matrix.configuration }} --no-build --verbosity normal \
+        -p:CollectCoverage=true -p:CoverletOutput=../TestResults/ -p:CoverletOutputFormat=opencover \
+        --logger "trx;LogFileName=test-results.trx" \
+        /p:ExcludeByFile="TeamTools.TSQL.Common/**"
 
     - name: Create Test Coverage Badge
       uses: simon-k/dotnet-code-coverage-badge@v1.0.0
@@ -96,7 +100,7 @@ jobs:
         label: Unit Test Coverage
         color: brightgreen
         path: TestResults\coverage.opencover.xml
-        gist-filename: code-coverage.json
+        gist-filename: TeamTools.Linter.SSDT.code-coverage.json
         gist-id: ${{ env.GIST_COVERAGE_ID }}
         gist-auth-token: ${{ secrets.GIST_AUTH_TOKEN }}
 
@@ -109,5 +113,5 @@ jobs:
       if: ${{ !cancelled() }}       # run this step even if previous step failed
       with:
         name: NUnit Tests            # Name of the check run which will be created
-        path: TeamTools.SSDT.ProjectValidatorTests\TestResults\*.trz
+        path: TeamTools.SSDT.ProjectValidatorTests\TestResults\*.trx
         reporter: dotnet-nunit
