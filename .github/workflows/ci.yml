@@ -101,7 +101,7 @@ jobs:
         color: brightgreen
         path: TestResults\coverage.opencover.xml
         gist-filename: TeamTools.Linter.SSDT.code-coverage.json
-        gist-id: ${{ env.GIST_COVERAGE_ID }}
+        gist-id: ${{ vars.GIST_COVERAGE_ID }}
         gist-auth-token: ${{ secrets.GIST_AUTH_TOKEN }}
         
     - name: Create Awesome Badge
@@ -109,7 +109,7 @@ jobs:
       if: ${{ !cancelled() }}       # run this step even if previous step failed
       with:
         auth: ${{ secrets.GIST_AUTH_TOKEN }}
-        gistID: ${{ env.GIST_COVERAGE_ID }}
+        gistID: ${{ vars.GIST_COVERAGE_ID }}
         filename: teamtools-linter-ssdt-code-coverage.svg
         label: Coverage
         message: ${{ steps.create_coverage_badge.outputs.percentage }}%
