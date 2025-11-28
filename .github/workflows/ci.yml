@@ -44,6 +44,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     strategy:
+      fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest]
         configuration: [Debug, Release]
@@ -74,7 +75,7 @@ jobs:
     
     - name: Install coverlet
       run: |
-           dotnet add package coverlet.msbuild --version 6.0.4 && \
+           dotnet add package coverlet.msbuild --version 6.0.4 &&
            dotnet add package coverlet.collector --version 6.0.4
       working-directory: TeamTools.SSDT.ProjectValidatorTests
           
