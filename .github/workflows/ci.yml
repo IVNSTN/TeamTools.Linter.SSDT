@@ -34,7 +34,9 @@ jobs:
       run: |
         TAG=${{ steps.bump-semver.outputs.new_version }}
         echo Latest tag: $TAG
-        echo "VERSION=${TAG#v}" >> $GITHUB_ENV
+        VERSION=${TAG#v}
+        echo Next version: $VERSION        
+        echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
     
   build:
     name: Build solution
