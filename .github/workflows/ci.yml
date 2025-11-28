@@ -86,10 +86,10 @@ jobs:
       run: dotnet build --no-restore --configuration ${{ matrix.configuration }} --p:ContinuousIntegrationBuild=true --p:GenerateAssemblyInfo=false
 
     - name: Test
-      run: |
-        dotnet test --configuration ${{ matrix.configuration }} --no-build --verbosity normal \
-        -p:CollectCoverage=true -p:CoverletOutput=../TestResults/ -p:CoverletOutputFormat=opencover \
-        /p:ExcludeByFile="TeamTools.TSQL.Common/**" \
+      run: >
+        dotnet test --configuration ${{ matrix.configuration }} --no-build --verbosity normal
+        -p:CollectCoverage=true -p:CoverletOutput=../TestResults/ -p:CoverletOutputFormat=opencover
+        /p:ExcludeByFile="TeamTools.TSQL.Common/**"
         --logger "trx;LogFileName=test-results.trx"
 
     - name: Create Test Coverage Badge
