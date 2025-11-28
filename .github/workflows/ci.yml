@@ -110,7 +110,7 @@ jobs:
       with:
         auth: ${{ secrets.GIST_AUTH_TOKEN }}
         gistID: ${{ env.GIST_COVERAGE_ID }}
-        filename: test.svg
+        filename: teamtools-linter-ssdt-code-coverage.svg
         label: Coverage
         message: ${{ steps.create_coverage_badge.outputs.percentage }}%
         valColorRange: ${{ steps.create_coverage_badge.outputs.percentage }}
@@ -125,5 +125,6 @@ jobs:
       uses: dorny/test-reporter@v2
       if: ${{ !cancelled() }}       # run this step even if previous step failed
       with:
+        name: NUnit tests
         path: '$GITHUB_WORKSPACE\TeamTools.SSDT.ProjectValidatorTests\TestResults\test-results.trx,TestResults\*.trx'
         reporter: dotnet-trx
