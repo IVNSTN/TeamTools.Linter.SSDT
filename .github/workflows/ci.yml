@@ -114,4 +114,4 @@ jobs:
       with:
         name: NUnit Tests
         path: TeamTools.SSDT.ProjectValidatorTests\TestResults\test-results.trx
-        reporter: dotnet-nunit
+        reporter: dotnet-trx
