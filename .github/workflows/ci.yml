@@ -74,6 +74,11 @@ jobs:
           
     - name: Restore dependencies
       run: dotnet restore --p:ContinuousIntegrationBuild=true
+    
+    - name: Install coverlet
+      run: |
+           dotnet add package coverlet.msbuild --version 6.0.4 && \
+           dotnet add package coverlet.collector --version 6.0.4
       
     - name: Build
       run: dotnet build --no-restore --configuration ${{ matrix.configuration }} --p:ContinuousIntegrationBuild=true --p:GenerateAssemblyInfo=false
