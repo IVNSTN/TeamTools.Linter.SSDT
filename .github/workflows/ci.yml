@@ -85,12 +85,6 @@ jobs:
     - name: Build
       run: dotnet build --no-restore --configuration ${{ matrix.configuration }} --p:ContinuousIntegrationBuild=true --p:GenerateAssemblyInfo=false
 
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: build-output
-        path: ./TeamTools.SSDT.ProjectValidator/bin/${{ matrix.configuration }}
-
     - name: Test
       run: dotnet test --configuration ${{ matrix.configuration }} --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover --logger "trx;LogFileName=test-results.trx"
 
