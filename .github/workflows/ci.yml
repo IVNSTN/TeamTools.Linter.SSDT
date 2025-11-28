@@ -137,5 +137,5 @@ jobs:
       if: ${{ !cancelled() }}       # run this step even if previous step failed
       with:
         name: NUnit tests
-        path: '${{ env.GITHUB_WORKSPACE }}\TeamTools.SSDT.ProjectValidatorTests\TestResults\test-results.trx,**\TestResults\*.trx,*.trx'
+        path: 'TeamTools.SSDT.ProjectValidatorTests/TestResults/test-results.trx,**/TestResults/*.trx,*.trx'
         reporter: dotnet-trx
