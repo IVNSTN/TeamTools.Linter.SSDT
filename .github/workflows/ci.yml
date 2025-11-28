@@ -25,7 +25,6 @@ jobs:
 
     - uses: actions-ecosystem/action-bump-semver@v1
       id: bump-semver
-      if: ${{ steps.release-label.outputs.level != null }}
       with:
         current_version: ${{ steps.get-latest-tag.outputs.tag }}
         level: patch
