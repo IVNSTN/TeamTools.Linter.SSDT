@@ -89,8 +89,8 @@ jobs:
       run: |
         dotnet test --configuration ${{ matrix.configuration }} --no-build --verbosity normal \
         -p:CollectCoverage=true -p:CoverletOutput=../TestResults/ -p:CoverletOutputFormat=opencover \
-        --logger "trx;LogFileName=test-results.trx" \
-        /p:ExcludeByFile="TeamTools.TSQL.Common/**"
+        /p:ExcludeByFile="TeamTools.TSQL.Common/**" \
+        --logger "trx;LogFileName=test-results.trx"
 
     - name: Create Test Coverage Badge
       uses: simon-k/dotnet-code-coverage-badge@v1.0.0
@@ -112,6 +112,6 @@ jobs:
       uses: dorny/test-reporter@v2
       if: ${{ !cancelled() }}       # run this step even if previous step failed
       with:
-        name: NUnit Tests            # Name of the check run which will be created
-        path: TeamTools.SSDT.ProjectValidatorTests\TestResults\*.trx
+        name: NUnit Tests
+        path: TeamTools.SSDT.ProjectValidatorTests\TestResults\test-results.trx
         reporter: dotnet-nunit
