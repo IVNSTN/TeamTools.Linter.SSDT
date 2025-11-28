@@ -13,7 +13,7 @@ jobs:
   semver:
     runs-on: ubuntu-latest
     outputs:
-      next-version: ${{ steps..next-ver.outputs.VERSION }}
+      next-version: ${{ steps.next-ver.outputs.VERSION }}
     
     steps:
     - uses: actions/checkout@v4
