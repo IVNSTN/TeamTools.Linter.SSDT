@@ -30,17 +30,28 @@ jobs:
     - name: Display dotnet version
       run: dotnet --version
       
-    - name: Git Version
-      id: version
-      uses: codacy/git-version@2.7.1
+    - uses: actions-ecosystem/action-get-latest-tag@v1
+      id: get-latest-tag
       with:
-        release-branch: main
-        prefix: v
+        semver_only: true
+
+    - uses: actions-ecosystem/action-bump-semver@v1
+      id: bump-semver
+      if: ${{ steps.release-label.outputs.level != null }}
+      with:
+        current_version: ${{ steps.get-latest-tag.outputs.tag }}
+        level: minor
+        
+    - name: Prepare next version
+      run: |
+        VERSION=${{ steps.bump-semver.outputs.new_version }}
+        echo Version: $VERSION
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
 
     - name: Set version in all AssemblyInfo.cs files
       uses: secondbounce/assemblyinfo-update@v2
       with:
-        version: ${{ steps.version.outputs.version }}
+        version: ${{ VERSION }}
 
     - name: Cache NuGet packages
       uses: actions/cache@v4
