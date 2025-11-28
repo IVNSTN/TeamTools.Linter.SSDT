@@ -103,6 +103,19 @@ jobs:
         gist-filename: TeamTools.Linter.SSDT.code-coverage.json
         gist-id: ${{ env.GIST_COVERAGE_ID }}
         gist-auth-token: ${{ secrets.GIST_AUTH_TOKEN }}
+        
+    - name: Create Awesome Badge
+      uses: schneegans/dynamic-badges-action@v1.7.0
+      if: ${{ !cancelled() }}       # run this step even if previous step failed
+      with:
+        auth: ${{ secrets.GIST_AUTH_TOKEN }}
+        gistID: ${{ env.GIST_COVERAGE_ID }}
+        filename: test.svg
+        label: Coverage
+        message: ${{ steps.create_coverage_badge.outputs.percentage }}%
+        valColorRange: ${{ steps.create_coverage_badge.outputs.percentage }}
+        maxColorRange: 100
+        minColorRange: 0
 
     - name: Print code coverage
       if: steps.create_coverage_badge.outcome == 'success'
@@ -112,6 +125,5 @@ jobs:
       uses: dorny/test-reporter@v2
       if: ${{ !cancelled() }}       # run this step even if previous step failed
       with:
-        name: NUnit Tests
-        path: 'TeamTools.SSDT.ProjectValidatorTests\TestResults\test-results.trx'
+        path: '$GITHUB_WORKSPACE\TeamTools.SSDT.ProjectValidatorTests\TestResults\test-results.trx,TestResults\*.trx'
         reporter: dotnet-trx
