@@ -92,7 +92,7 @@ jobs:
         /p:ExcludeByFile="TeamTools.TSQL.Common/**"
         --logger "trx;LogFileName=test-results.trx"
 
-    - name: Create Test Coverage Badge
+    - name: Extract coverage info
       uses: simon-k/dotnet-code-coverage-badge@v1.0.0
       id: create_coverage_badge
       if: ${{ hashFiles('TestResults\coverage.opencover.xml') != '' }}
@@ -104,7 +104,7 @@ jobs:
         gist-id: ${{ vars.GIST_COVERAGE_ID }}
         gist-auth-token: ${{ secrets.GIST_AUTH_TOKEN }}
         
-    - name: Create Awesome Badge
+    - name: Create Coverage Badge
       uses: schneegans/dynamic-badges-action@v1.7.0
       if: ${{ !cancelled() }}       # run this step even if previous step failed
       with:
@@ -116,6 +116,17 @@ jobs:
         valColorRange: ${{ steps.create_coverage_badge.outputs.percentage }}
         maxColorRange: 100
         minColorRange: 0
+        
+    - name: Create Rules Count Badge
+      uses: schneegans/dynamic-badges-action@v1.7.0
+      if: ${{ !cancelled() }}       # run this step even if previous step failed
+      with:
+        auth: ${{ secrets.GIST_AUTH_TOKEN }}
+        gistID: ${{ vars.GIST_COVERAGE_ID }}
+        filename: teamtools-linter-ssdt-rules-count.svg
+        label: Code analysis rules
+        message: ${{ vars.CODE_ANALYSIS_RULES_COUNT }}%
+        color: blue
 
     - name: Print code coverage
       if: steps.create_coverage_badge.outcome == 'success'
@@ -126,5 +137,5 @@ jobs:
       if: ${{ !cancelled() }}       # run this step even if previous step failed
       with:
         name: NUnit tests
-        path: '$GITHUB_WORKSPACE\TeamTools.SSDT.ProjectValidatorTests\TestResults\test-results.trx,TestResults\*.trx'
+        path: '$GITHUB_WORKSPACE\TeamTools.SSDT.ProjectValidatorTests\TestResults\test-results.trx,**\TestResults\*.trx,*.trx'
         reporter: dotnet-trx
