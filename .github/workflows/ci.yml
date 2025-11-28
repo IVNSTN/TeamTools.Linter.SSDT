@@ -53,7 +53,7 @@ jobs:
       run: dotnet restore --p:ContinuousIntegrationBuild=true
       
     - name: Build
-      run: dotnet build --no-restore --configuration ${{ matrix.configuration }} --p:ContinuousIntegrationBuild=true
+      run: dotnet build --no-restore --configuration ${{ matrix.configuration }} --p:ContinuousIntegrationBuild=true --p:GenerateAssemblyInfo=false
 
   test:
     name: Run tests
