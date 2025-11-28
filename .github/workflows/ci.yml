@@ -44,9 +44,9 @@ jobs:
         
     - name: Prepare next version
       run: |
-        VERSION=${{ steps.bump-semver.outputs.new_version }}
-        echo Version: $VERSION
-        echo "VERSION=$VERSION" >> $GITHUB_ENV
+        TAG=${{ steps.bump-semver.outputs.new_version }}
+        echo Latest tag: $TAG
+        echo "VERSION=${TAG#v}" >> $GITHUB_ENV
 
     - name: Set version in all AssemblyInfo.cs files
       uses: secondbounce/assemblyinfo-update@v2
