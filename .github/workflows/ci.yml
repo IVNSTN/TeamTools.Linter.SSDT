@@ -113,5 +113,5 @@ jobs:
       if: ${{ !cancelled() }}       # run this step even if previous step failed
       with:
         name: NUnit Tests
-        path: TeamTools.SSDT.ProjectValidatorTests\TestResults\test-results.trx
+        path: 'TeamTools.SSDT.ProjectValidatorTests\TestResults\test-results.trx'
         reporter: dotnet-trx
