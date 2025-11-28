@@ -82,21 +82,31 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: build-output
-        path: ./bin
+        path: ./TeamTools.SSDT.ProjectValidator/bin/${{ matrix.configuration }}
 
     - name: Test
-      run: dotnet test --configuration ${{ matrix.configuration }} --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/coverage.opencover.xml -p:CoverletOutputFormat=opencover --logger "trx;LogFileName=test-results.trx"
+      run: dotnet test --configuration ${{ matrix.configuration }} --no-build --verbosity normal -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover --logger "trx;LogFileName=test-results.trx"
 
     - name: Create Test Coverage Badge
       uses: simon-k/dotnet-code-coverage-badge@v1.0.0
       id: create_coverage_badge
+      if: ${{ hashFiles('TestResults/coverage.opencover.xml') != '' }}
       with:
         label: Unit Test Coverage
         color: brightgreen
-        path: TeamTools.SSDT.ProjectValidatorTests/TestResults/coverage.opencover.xml
+        path: TestResults/coverage.opencover.xml
         gist-filename: TeamTools.Linter.SSDT.code-coverage.json
         gist-id: ${{ env.GIST_COVERAGE_ID }}
         gist-auth-token: ${{ secrets.GIST_AUTH_TOKEN }}
 
     - name: Print code coverage
+      if: steps.create_coverage_badge.outcome == 'success'
       run: echo "Code coverage percentage ${{steps.create_coverage_badge.outputs.percentage}}%"
+    
+    - name: Test Report
+      uses: dorny/test-reporter@v2
+      if: ${{ !cancelled() }}       # run this step even if previous step failed
+      with:
+        name: NUnit Tests            # Name of the check run which will be created
+        path: TestResults/*.trz
+        reporter: dotnet-nunit
