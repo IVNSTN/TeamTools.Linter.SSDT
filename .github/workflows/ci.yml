@@ -95,7 +95,7 @@ jobs:
     - name: Extract coverage info
       uses: simon-k/dotnet-code-coverage-badge@v1.0.0
       id: create_coverage_badge
-      if: ${{ hashFiles('TestResults\coverage.opencover.xml') != '' }}
+      if: ${{ !cancelled() && hashFiles('TestResults\coverage.opencover.xml') != '' }}
       with:
         label: Unit Test Coverage
         color: brightgreen
@@ -106,7 +106,7 @@ jobs:
         
     - name: Create Coverage Badge
       uses: schneegans/dynamic-badges-action@v1.7.0
-      if: ${{ !cancelled() }}       # run this step even if previous step failed
+      if: ${{ !cancelled() && hashFiles('TestResults\coverage.opencover.xml') != '' }} 
       with:
         auth: ${{ secrets.GIST_AUTH_TOKEN }}
         gistID: ${{ vars.GIST_COVERAGE_ID }}
@@ -137,5 +137,5 @@ jobs:
       if: ${{ !cancelled() }}       # run this step even if previous step failed
       with:
         name: NUnit tests
-        path: '$GITHUB_WORKSPACE\TeamTools.SSDT.ProjectValidatorTests\TestResults\test-results.trx,**\TestResults\*.trx,*.trx'
+        path: '${{ env.GITHUB_WORKSPACE }}\TeamTools.SSDT.ProjectValidatorTests\TestResults\test-results.trx,**\TestResults\*.trx,*.trx'
         reporter: dotnet-trx
