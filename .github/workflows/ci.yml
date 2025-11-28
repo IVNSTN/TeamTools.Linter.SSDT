@@ -10,8 +10,36 @@ on:
     branches: [ "main" ]
 
 jobs:
+  semver:
+    runs-on: ubuntu-latest
+    outputs:
+      next-version: ${{ steps..next-ver.outputs.VERSION }}
+    
+    steps:
+    - uses: actions/checkout@v4
+      
+    - uses: actions-ecosystem/action-get-latest-tag@v1
+      id: get-latest-tag
+      with:
+        semver_only: true
+
+    - uses: actions-ecosystem/action-bump-semver@v1
+      id: bump-semver
+      if: ${{ steps.release-label.outputs.level != null }}
+      with:
+        current_version: ${{ steps.get-latest-tag.outputs.tag }}
+        level: patch
+        
+    - name: Prepare next version
+      id: next-ver
+      run: |
+        TAG=${{ steps.bump-semver.outputs.new_version }}
+        echo Latest tag: $TAG
+        echo "VERSION=${TAG#v}" >> $GITHUB_ENV
+    
   build:
     name: Build solution
+    needs: semver
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -29,29 +57,11 @@ jobs:
 
     - name: Display dotnet version
       run: dotnet --version
-      
-    - uses: actions-ecosystem/action-get-latest-tag@v1
-      id: get-latest-tag
-      with:
-        semver_only: true
-
-    - uses: actions-ecosystem/action-bump-semver@v1
-      id: bump-semver
-      if: ${{ steps.release-label.outputs.level != null }}
-      with:
-        current_version: ${{ steps.get-latest-tag.outputs.tag }}
-        level: minor
-        
-    - name: Prepare next version
-      run: |
-        TAG=${{ steps.bump-semver.outputs.new_version }}
-        echo Latest tag: $TAG
-        echo "VERSION=${TAG#v}" >> $GITHUB_ENV
 
     - name: Set version in all AssemblyInfo.cs files
       uses: secondbounce/assemblyinfo-update@v2
       with:
-        version: ${VERSION}
+        version: ${{ needs.semver.outputs.next-version }}
 
     - name: Cache NuGet packages
       uses: actions/cache@v4
