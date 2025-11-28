@@ -68,6 +68,7 @@
   <PropertyGroup>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <NeutralLanguage>en</NeutralLanguage>
     <NeutralResourcesLanguage>en</NeutralResourcesLanguage>
