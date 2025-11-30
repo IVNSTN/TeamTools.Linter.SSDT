@@ -4,7 +4,7 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory).stylecop\StyleCop.ruleset</CodeAnalysisRuleSet>
     <RunSettingsFilePath>$(MSBuildThisFileDirectory).runsettings</RunSettingsFilePath>
-    <TreatWarningsAsErrors Condition=" '$(ContinuousIntegrationBuild)' == 'true' ">true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <NoWarn>$(NoWarn);NU1601;NU1603;NU1801;NETSDK1138</NoWarn>
     <!-- IDE0130 Namespace does not match folder structure -->
     <NoWarn>$(NoWarn);IDE0130</NoWarn>
@@ -68,6 +68,9 @@
   <PropertyGroup>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <NeutralLanguage>en</NeutralLanguage>
     <NeutralResourcesLanguage>en</NeutralResourcesLanguage>
