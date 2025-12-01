@@ -67,13 +67,15 @@
   <!-- Additional info options -->
   <PropertyGroup>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
-    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <NeutralLanguage>en</NeutralLanguage>
     <NeutralResourcesLanguage>en</NeutralResourcesLanguage>
+    <Company>Ivan Starostin</Company>
+    <Authors>Ivan Starostin et al.</Authors>
+    <Copyright>© $([System.DateTime]::Now.Year) $(Company)</Copyright>
+    <AssemblyCopyright>$(Copyright)</AssemblyCopyright>
+    <IncludeSourceRevisionInInformationalVersion>true</IncludeSourceRevisionInInformationalVersion>
   </PropertyGroup>
 
   <!-- No packing for test projects -->

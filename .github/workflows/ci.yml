@@ -9,6 +9,10 @@ on:
   pull_request:
     branches: [ "main" ]
 
+env:
+  PRODUCT_NAME: TeamTools.Linter.SSDT
+  OUTPUT_PATH: ${{ github.workspace }}/.bin/
+
 jobs:
   semver:
     runs-on: ubuntu-latest
@@ -70,16 +74,12 @@ jobs:
     - name: Display dotnet version
       run: dotnet --info
 
-    - name: Set version in all AssemblyInfo.cs files
-      uses: secondbounce/assemblyinfo-update@v2
-      with:
-        version: ${{ needs.semver.outputs.next-version }}
-
     - name: Cache NuGet packages
+      id: cache-nugets
       uses: actions/cache@v4
       with:
-        path: ~/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json', '**/*.csproj') }} # Unique key for the cache
+        path: ${{ github.workspace }}/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json', '**/*.csproj', 'Directory.Build.props') }} # Unique key for the cache
         restore-keys: |
           ${{ runner.os }}-nuget-
     
@@ -90,6 +90,7 @@ jobs:
       working-directory: TeamTools.SSDT.ProjectValidatorTests
           
     - name: Restore dependencies
+      # if: ${{ steps.cache-nugets.outputs.cache-hit != 'true' }}
       run: dotnet restore --p:ContinuousIntegrationBuild=true
       
     - name: Build
@@ -97,13 +98,19 @@ jobs:
       run: >
         dotnet build --no-restore
         --configuration ${{ matrix.configuration }}
-        --p:ContinuousIntegrationBuild=true
-        --p:GenerateAssemblyInfo=false
+        -p:VersionPrefix=${{ needs.semver.outputs.next-version }}
+        -p:ContinuousIntegrationBuild=true
+        -p:SourceRevisionId=${{ github.sha }}
+        -p:RepositoryUrl="${{ github.repositoryUrl }}"
+        -p:RepositoryType=git
+        -p:RepositoryBranch="${{ github.ref_name }}"
+        -p:BaseOutputPath="${{ env.OUTPUT_PATH }}"
 
     - name: Test
       if: ${{ !matrix.coverage }}
       run: >
         dotnet test --no-build --verbosity normal
+        -p:BaseOutputPath="${{ env.OUTPUT_PATH }}"
         --configuration ${{ matrix.configuration }}
         --logger "trx;LogFileName=${{ github.workspace }}/TestResults/test-results.trx" 
 
@@ -112,6 +119,7 @@ jobs:
       run: >
         dotnet test --no-build --verbosity normal
         -p:CollectCoverage=true -p:CoverletOutput="${{ github.workspace }}/TestResults/" -p:CoverletOutputFormat=opencover /p:ExcludeByFile="**/TeamTools.TSQL.Common/**/*.cs"
+        -p:BaseOutputPath="${{ env.OUTPUT_PATH }}"
         --configuration ${{ matrix.configuration }}
         --logger "trx;LogFileName=${{ github.workspace }}/TestResults/test-results.trx" 
 
@@ -120,38 +128,36 @@ jobs:
       if: ${{ matrix.coverage }}
       with:
         name: test-results
-        path: |
-          TestResults
-          TeamTools.SSDT.ProjectValidatorTests/TestResults
+        path: TestResults
     
     - name: Test Report
       uses: dorny/test-reporter@v2
       if: ${{ !cancelled() }}       # run this step even if previous step failed
       with:
         name: NUnit testing ${{ matrix.configuration }} build on ${{ matrix.os }}
-        path: 'TeamTools.SSDT.ProjectValidatorTests/TestResults/test-results.trx,**/TestResults/*.trx,*.trx'
+        path: '**/TestResults/*.trx,*.trx'
         reporter: dotnet-trx
 
     - name: Upload build artifacts 2.0
       uses: actions/upload-artifact@v4
       if: ${{ matrix.configuration == 'Release' && matrix.os == 'windows-latest' && steps.build.conclusion == 'success' }}
       with:
-        name: TeamTools.SSDT.ProjectValidator-${{ needs.semver.outputs.next-version }}-${{ matrix.configuration }}-netstandard2.0
-        path: TeamTools.SSDT.ProjectValidator/bin/${{ matrix.configuration }}/netstandard2.0
+        name: ${{ env.PRODUCT_NAME }}-${{ needs.semver.outputs.next-version }}-${{ matrix.configuration }}-netstandard2.0
+        path: ${{ env.OUTPUT_PATH }}/${{ matrix.configuration }}/netstandard2.0
 
     - name: Upload build artifacts 6.0
       uses: actions/upload-artifact@v4
       if: ${{ matrix.configuration == 'Release' && matrix.os == 'windows-latest' && steps.build.conclusion == 'success' }}
       with:
-        name: TeamTools.SSDT.ProjectValidator-${{ needs.semver.outputs.next-version }}-${{ matrix.configuration }}-net6.0
-        path: TeamTools.SSDT.ProjectValidator/bin/${{ matrix.configuration }}/net6.0
+        name: ${{ env.PRODUCT_NAME }}-${{ needs.semver.outputs.next-version }}-${{ matrix.configuration }}-net6.0
+        path: ${{ env.OUTPUT_PATH }}/${{ matrix.configuration }}/net6.0
 
     - name: Upload build artifacts 8.0
       uses: actions/upload-artifact@v4
       if: ${{ matrix.configuration == 'Release' && matrix.os == 'windows-latest' && steps.build.conclusion == 'success' }}
       with:
-        name: TeamTools.SSDT.ProjectValidator-${{ needs.semver.outputs.next-version }}-${{ matrix.configuration }}-net8.0
-        path: TeamTools.SSDT.ProjectValidator/bin/${{ matrix.configuration }}/net8.0
+        name: ${{ env.PRODUCT_NAME }}-${{ needs.semver.outputs.next-version }}-${{ matrix.configuration }}-net8.0
+        path: ${{ env.OUTPUT_PATH }}/${{ matrix.configuration }}/net8.0
 
   report:
     needs: build
@@ -165,6 +171,7 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: test-results
+        path: TestResults
   
     - name: Extract coverage info
       uses: simon-k/dotnet-code-coverage-badge@v1.0.0
@@ -174,7 +181,7 @@ jobs:
         label: Unit Test Coverage
         color: brightgreen
         path: TestResults/coverage.opencover.xml
-        gist-filename: TeamTools.Linter.SSDT.code-coverage.json
+        gist-filename: code-coverage.json
         gist-id: ${{ vars.GIST_COVERAGE_ID }}
         gist-auth-token: ${{ secrets.GIST_AUTH_TOKEN }}
         
@@ -184,7 +191,7 @@ jobs:
       with:
         auth: ${{ secrets.GIST_AUTH_TOKEN }}
         gistID: ${{ vars.GIST_COVERAGE_ID }}
-        filename: teamtools-linter-ssdt-code-coverage.svg
+        filename: code-coverage.svg
         label: Coverage
         message: ${{ steps.create_coverage_badge.outputs.percentage }}%
         valColorRange: ${{ steps.create_coverage_badge.outputs.percentage }}
@@ -197,7 +204,7 @@ jobs:
       with:
         auth: ${{ secrets.GIST_AUTH_TOKEN }}
         gistID: ${{ vars.GIST_COVERAGE_ID }}
-        filename: teamtools-linter-ssdt-rules-count.svg
+        filename: rules-count.svg
         label: Code analysis rules
         message: ${{ vars.CODE_ANALYSIS_RULES_COUNT }}
         color: red
