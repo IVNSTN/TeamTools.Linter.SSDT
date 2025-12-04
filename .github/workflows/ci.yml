@@ -18,10 +18,10 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       next-version: ${{ steps.next-ver.outputs.VERSION }}
-    
+
     steps:
     - uses: actions/checkout@v4
-      
+
     - uses: actions-ecosystem/action-get-latest-tag@v1
       id: get-latest-tag
       with:
@@ -32,21 +32,21 @@ jobs:
       with:
         current_version: ${{ steps.get-latest-tag.outputs.tag }}
         level: patch
-        
+
     - name: Prepare next version
       id: next-ver
       run: |
         TAG=${{ steps.bump-semver.outputs.new_version }}
         echo Latest tag: $TAG
         VERSION=${TAG#v}
-        echo Next version: $VERSION        
+        echo Next version: $VERSION
         echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-    
+
   build:
     name: Build and test
     needs: semver
     runs-on: ${{ matrix.os }}
-    
+
     defaults:
       run:
         shell: bash
@@ -82,17 +82,17 @@ jobs:
         key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json', '**/*.csproj', 'Directory.Build.props') }} # Unique key for the cache
         restore-keys: |
           ${{ runner.os }}-nuget-
-    
+
     - name: Install coverlet
       run: |
            dotnet add package coverlet.msbuild --version 6.0.4 &&
            dotnet add package coverlet.collector --version 6.0.4
       working-directory: TeamTools.SSDT.ProjectValidatorTests
-          
+
     - name: Restore dependencies
       # if: ${{ steps.cache-nugets.outputs.cache-hit != 'true' }}
       run: dotnet restore --p:ContinuousIntegrationBuild=true
-      
+
     - name: Build
       id: build
       run: >
@@ -112,7 +112,7 @@ jobs:
         dotnet test --no-build --verbosity normal
         -p:BaseOutputPath="${{ env.OUTPUT_PATH }}"
         --configuration ${{ matrix.configuration }}
-        --logger "trx;LogFileName=${{ github.workspace }}/TestResults/test-results.trx" 
+        --logger "trx;LogFileName=${{ github.workspace }}/TestResults/test-results.trx"
 
     - name: Test with coverage
       if: ${{ matrix.coverage }}
@@ -121,7 +121,7 @@ jobs:
         -p:CollectCoverage=true -p:CoverletOutput="${{ github.workspace }}/TestResults/" -p:CoverletOutputFormat=opencover /p:ExcludeByFile="**/TeamTools.TSQL.Common/**/*.cs"
         -p:BaseOutputPath="${{ env.OUTPUT_PATH }}"
         --configuration ${{ matrix.configuration }}
-        --logger "trx;LogFileName=${{ github.workspace }}/TestResults/test-results.trx" 
+        --logger "trx;LogFileName=${{ github.workspace }}/TestResults/test-results.trx"
 
     - name: Upload test artifacts
       uses: actions/upload-artifact@v4
@@ -129,7 +129,7 @@ jobs:
       with:
         name: test-results
         path: TestResults
-    
+
     - name: Test Report
       uses: dorny/test-reporter@v2
       if: ${{ !cancelled() }}       # run this step even if previous step failed
@@ -166,13 +166,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Download test results
       uses: actions/download-artifact@v4
       with:
         name: test-results
         path: TestResults
-  
+
     - name: Extract coverage info
       uses: simon-k/dotnet-code-coverage-badge@v1.0.0
       id: create_coverage_badge
@@ -184,10 +184,10 @@ jobs:
         gist-filename: code-coverage.json
         gist-id: ${{ vars.GIST_COVERAGE_ID }}
         gist-auth-token: ${{ secrets.GIST_AUTH_TOKEN }}
-        
+
     - name: Create Coverage Badge
       uses: schneegans/dynamic-badges-action@v1.7.0
-      if: ${{ !cancelled() && hashFiles('TestResults/coverage.opencover.xml') != '' && steps.create_coverage_badge.outputs.percentage != '' }} 
+      if: ${{ !cancelled() && hashFiles('TestResults/coverage.opencover.xml') != '' && steps.create_coverage_badge.outputs.percentage != '' }}
       with:
         auth: ${{ secrets.GIST_AUTH_TOKEN }}
         gistID: ${{ vars.GIST_COVERAGE_ID }}
@@ -197,7 +197,7 @@ jobs:
         valColorRange: ${{ steps.create_coverage_badge.outputs.percentage }}
         maxColorRange: 100
         minColorRange: 0
-        
+
     - name: Create Rules Count Badge
       uses: schneegans/dynamic-badges-action@v1.7.0
       if: ${{ !cancelled() }}       # run this step even if previous step failed
