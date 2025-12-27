@@ -5,6 +5,8 @@
 [![License MIT](https://gist.githubusercontent.com/IVNSTN/46aff0ef7b8e5f261ddb19831528149d/raw/License-MIT-purple.svg)](./LICENSE)
 [![coverage](https://gist.githubusercontent.com/IVNSTN/46aff0ef7b8e5f261ddb19831528149d/raw/code-coverage.svg)](https://github.com/IVNSTN/TeamTools.Linter.SSDT/actions)
 
+[\[English en-us\]](./README.md) [\[Русский ru-ru\]](./README.ru-ru.md)
+
 Static analysis plugin for linting SSDT- and RDL-project files.
 
 It can be used as a plugin with CLI-utility [IVNSTN/TeamTools.Linter.CommandLine](https://github.com/IVNSTN/TeamTools.Linter.CommandLine).
