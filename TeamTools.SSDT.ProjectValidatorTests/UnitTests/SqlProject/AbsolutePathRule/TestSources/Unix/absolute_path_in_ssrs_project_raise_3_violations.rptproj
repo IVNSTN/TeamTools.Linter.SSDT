@@ -2,7 +2,7 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <FullPath>Release</FullPath>
-    <OutputPath>d:\bin\Release</OutputPath> <!-- 1 -->
+    <OutputPath>/home/src/Release</OutputPath> <!-- 1 -->
     <ErrorLevel>2</ErrorLevel>
     <OverwriteDatasets>False</OverwriteDatasets>
     <OverwriteDataSources>False</OverwriteDataSources>
@@ -19,9 +19,9 @@
     <Reports>@(Report)</Reports>
   </PropertyGroup>
   <ItemGroup>
-    <Report Include="c:\report1.rdl" /> <!-- 2 -->
+    <Report Include="/home/src/report1.rdl" /> <!-- 2 -->
     <Report Include="report2.rdl" />
     <Report Include="report3.rdl" />
   </ItemGroup>
-  <Import Project="\\Reporting Services\Microsoft.ReportingServices.MSBuilder.targets" /> <!-- 3 -->
+  <Import Project="/home/src/Microsoft.ReportingServices.MSBuilder.targets" /> <!-- 3 -->
 </Project>

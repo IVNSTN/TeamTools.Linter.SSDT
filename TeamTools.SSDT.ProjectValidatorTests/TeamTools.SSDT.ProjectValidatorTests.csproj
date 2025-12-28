@@ -23,8 +23,8 @@
 
   <!-- Manual includes -->
   <ItemGroup>
-    <Build Remove="UnitTests\**\TestSources\*.*" />
-    <Content Include="UnitTests\**\TestSources\*.*">
+    <Build Remove="UnitTests\**\TestSources\**\*.*" />
+    <Content Include="UnitTests\**\TestSources\**\*.*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
