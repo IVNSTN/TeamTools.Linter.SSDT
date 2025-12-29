@@ -12,4 +12,4 @@
 Может использоваться в качестве плагина для консольной утилиты [IVNSTN/TeamTools.Linter.CommandLine](https://github.com/IVNSTN/TeamTools.Linter.CommandLine).
 
 
-[Документация по правилам](./TeamTools.SSDT.ProjectValidator/Resources/Docs)
+[Документация по правилам](./TeamTools.SSDT.ProjectValidator/Resources/Docs/ru-ru/readme.md)
