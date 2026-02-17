@@ -9,9 +9,9 @@
   <!-- Packing options -->
   <PropertyGroup>
     <IsPackable>true</IsPackable>
-    <PackageOutputPath>../.nupkg</PackageOutputPath>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageReadmeFile>./readme.md</PackageReadmeFile>
+    <PackageOutputPath>../.nupkgs</PackageOutputPath>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageTags>SSDT;sqlproj;StaticCodeAnalysis;CodeQuality;TeamTools</PackageTags>
     <Description>Pluggable SSDT-style project configuration validator</Description>
   </PropertyGroup>
@@ -23,7 +23,7 @@
 
   <!-- Manual includes -->
   <ItemGroup>
-    <Content Include="..\LICENSE" Pack="true" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="$(MSBuildThisFileDirectory)..\LICENSE" Pack="true" CopyToOutputDirectory="PreserveNewest" PackagePath="\" />
     <Content Include="DefaultConfig.json" Pack="true" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="Resources\ViolationMessages.ru-ru.json" Pack="true" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="Resources\ViolationMessages.json" Pack="true" CopyToOutputDirectory="PreserveNewest" />
@@ -33,6 +33,7 @@
       <Visible>true</Visible>
       <Pack>true</Pack>
     </Content>
+    <Content Include="readme.md" Pack="true" PackagePath="\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Strings.Designer.cs">

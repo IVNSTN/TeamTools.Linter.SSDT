@@ -20,7 +20,8 @@ env:
   TEST_PROJECT: TeamTools.SSDT.ProjectValidatorTests
   PUBLISH_PROJECT_PATH: TeamTools.SSDT.ProjectValidator/TeamTools.SSDT.ProjectValidator.csproj
   OUTPUT_PATH: ${{ github.workspace }}/.bin/
-  PUBLISH_PATH: ${{ github.workspace }}/.pub/
+  PUBLISH_PATH: ${{ github.workspace }}/.pub
+  NUPKG_PATH: ${{ github.workspace }}\.nupkgs
 
 jobs:
   semver:
@@ -101,7 +102,7 @@ jobs:
         run: |
           dotnet add package coverlet.msbuild --version 6.0.4 &&
           dotnet add package coverlet.collector --version 6.0.4
-        working-directory: TeamTools.SSDT.ProjectValidatorTests
+        working-directory: ${{ env.TEST_PROJECT }}
 
       - name: Restore dependencies
         # if: ${{ steps.cache-nugets.outputs.cache-hit != 'true' }}
@@ -145,12 +146,29 @@ jobs:
           -p:BaseOutputPath="${{ env.OUTPUT_PATH }}"
           -p:PublishDir="${{ env.PUBLISH_PATH }}/Release/net8.0"
 
+      - name: Pack
+        if: ${{ matrix.publish }}
+        run: >
+          dotnet pack "${{ env.PUBLISH_PROJECT_PATH }}"
+          --no-build
+          --output "${{ env.NUPKG_PATH }}"
+          -p:Configuration=Release
+          -p:BaseOutputPath="${{ env.OUTPUT_PATH }}"
+          -p:VersionPrefix=${{ needs.semver.outputs.next-version }}
+          -p:Authors="Ivan Starostin et al"
+          -p:Copyright="2019- (c) Ivan Starostin"
+          -p:RepositoryCommit=${{ github.sha }}
+          -p:RepositoryUrl="${{ github.repositoryUrl }}"
+          -p:RepositoryType=git
+          -p:RepositoryBranch="${{ github.ref_name }}"
+
       - name: Upload build artifacts 2.0
         uses: actions/upload-artifact@v4
         if: ${{ matrix.publish }}
         with:
           name: ${{ env.PRODUCT_NAME }}-${{ needs.semver.outputs.next-version }}-${{ matrix.configuration }}-netstandard2.0
           path: ${{ env.PUBLISH_PATH }}/${{ matrix.configuration }}/netstandard2.0
+          if-no-files-found: error
 
       - name: Upload build artifacts 6.0
         uses: actions/upload-artifact@v4
@@ -158,6 +176,7 @@ jobs:
         with:
           name: ${{ env.PRODUCT_NAME }}-${{ needs.semver.outputs.next-version }}-${{ matrix.configuration }}-net6.0
           path: ${{ env.PUBLISH_PATH }}/${{ matrix.configuration }}/net6.0
+          if-no-files-found: error
 
       - name: Upload build artifacts 8.0
         uses: actions/upload-artifact@v4
@@ -165,6 +184,17 @@ jobs:
         with:
           name: ${{ env.PRODUCT_NAME }}-${{ needs.semver.outputs.next-version }}-${{ matrix.configuration }}-net8.0
           path: ${{ env.PUBLISH_PATH }}/${{ matrix.configuration }}/net8.0
+          if-no-files-found: error
+
+      - name: Upload nugets
+        uses: actions/upload-artifact@v4
+        if: ${{ matrix.publish }}
+        with:
+          name: nuget-packages
+          include-hidden-files: true
+          if-no-files-found: error
+          path: |
+            ${{ env.NUPKG_PATH }}\*.nupkg
 
       - name: Test
         if: ${{ !matrix.coverage }}
@@ -189,6 +219,7 @@ jobs:
         with:
           name: test-results
           path: TestResults
+          if-no-files-found: error
 
       - name: Test Report
         uses: dorny/test-reporter@v2
@@ -197,6 +228,7 @@ jobs:
           name: NUnit testing ${{ matrix.configuration }} build on ${{ matrix.os }}
           path: "**/TestResults/*.trx,*.trx"
           reporter: dotnet-trx
+          if-no-files-found: error
 
   validate-markdown:
     runs-on: ubuntu-latest
