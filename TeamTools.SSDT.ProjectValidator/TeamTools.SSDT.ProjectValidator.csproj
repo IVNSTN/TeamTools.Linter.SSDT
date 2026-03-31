@@ -24,6 +24,7 @@
   <!-- Manual includes -->
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)..\LICENSE" Pack="true" CopyToOutputDirectory="PreserveNewest" PackagePath="\" />
+    <Content Include="$(MSBuildThisFileDirectory)..\README.md" Pack="true" CopyToOutputDirectory="PreserveNewest" PackagePath="\" />
     <Content Include="DefaultConfig.json" Pack="true" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="Resources\ViolationMessages.ru-ru.json" Pack="true" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="Resources\ViolationMessages.json" Pack="true" CopyToOutputDirectory="PreserveNewest" />
@@ -33,7 +34,6 @@
       <Visible>true</Visible>
       <Pack>true</Pack>
     </Content>
-    <Content Include="readme.md" Pack="true" PackagePath="\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Strings.Designer.cs">
