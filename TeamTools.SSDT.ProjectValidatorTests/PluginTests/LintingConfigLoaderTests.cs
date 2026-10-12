@@ -30,7 +30,7 @@ namespace TeamTools.SSDT.ProjectValidatorTests.PluginTests
         public void ConfigLoaderReadsAllBlocksFromDefaultConfig()
         {
             var loader = new LintingConfigLoader();
-            var configPath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "DefaultConfig.json");
+            var configPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "DefaultConfig.json");
 
             Assert.That(File.Exists(configPath), Is.True);
             var config = loader.LoadConfig(configPath);

@@ -27,7 +27,7 @@ namespace TeamTools.SSDT.ProjectValidator.Rules.Reports
             ns.AddNamespace(ReportsNamespace, rdl.FileDom.Root.GetDefaultNamespace().NamespaceName);
 
             var datasets = ExtractDatasets(rdl.FileDom, ns);
-            if (!datasets.Any())
+            if (datasets.Count == 0)
             {
                 return;
             }
@@ -43,7 +43,7 @@ namespace TeamTools.SSDT.ProjectValidator.Rules.Reports
             }
         }
 
-        private static ICollection<string> ExtractLinksToDatasets(XDocument doc, XmlNamespaceManager ns)
+        private static HashSet<string> ExtractLinksToDatasets(XDocument doc, XmlNamespaceManager ns)
         {
             var directLinks = doc.XPathSelectElements($"//{ReportsNamespace}:DataSetName", ns)
                 .Select(nd => nd.Value)
@@ -78,7 +78,7 @@ namespace TeamTools.SSDT.ProjectValidator.Rules.Reports
             return result;
         }
 
-        private static IDictionary<string, XElement> ExtractDatasets(XDocument doc, XmlNamespaceManager ns)
+        private static Dictionary<string, XElement> ExtractDatasets(XDocument doc, XmlNamespaceManager ns)
         {
             var nodes = doc.XPathSelectElements($"//{ReportsNamespace}:DataSets/{ReportsNamespace}:DataSet", ns);
             var result = nodes
