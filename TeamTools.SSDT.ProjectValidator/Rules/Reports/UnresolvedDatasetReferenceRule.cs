@@ -26,7 +26,7 @@ namespace TeamTools.SSDT.ProjectValidator.Rules.Reports
             ns.AddNamespace(ReportsNamespace, rdl.FileDom.Root.GetDefaultNamespace().NamespaceName);
 
             var refs = ExtractLinksToDatasets(rdl.FileDom, ns);
-            if (!refs.Any())
+            if (refs.Count == 0)
             {
                 return;
             }
@@ -44,7 +44,7 @@ namespace TeamTools.SSDT.ProjectValidator.Rules.Reports
         }
 
         // key - ref name, value = ref node and name of referenced dataset
-        private static IDictionary<string, KeyValuePair<XElement, string>> ExtractLinksToDatasets(XDocument doc, XmlNamespaceManager ns)
+        private static Dictionary<string, KeyValuePair<XElement, string>> ExtractLinksToDatasets(XDocument doc, XmlNamespaceManager ns)
         {
             var paramNodes = doc.XPathSelectElements($"//{ReportsNamespace}:ReportParameter[.//{ReportsNamespace}:DataSetName]", ns)
                  .GroupBy(nd => "ReportParameter " + nd.Attribute("Name")?.Value ?? "noname");
@@ -64,7 +64,7 @@ namespace TeamTools.SSDT.ProjectValidator.Rules.Reports
             return result;
         }
 
-        private static ICollection<string> ExtractDatasources(XDocument doc, XmlNamespaceManager ns)
+        private static HashSet<string> ExtractDatasources(XDocument doc, XmlNamespaceManager ns)
         {
             var nodes = doc.XPathSelectElements($"//{ReportsNamespace}:DataSets/{ReportsNamespace}:DataSet", ns);
             var result = new HashSet<string>(

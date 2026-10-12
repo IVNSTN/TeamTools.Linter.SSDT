@@ -27,7 +27,7 @@ namespace TeamTools.SSDT.ProjectValidator.Rules.Reports
             ns.AddNamespace(ReportsNamespace, rdl.FileDom.Root.GetDefaultNamespace().NamespaceName);
 
             var parameters = ExtractParameters(rdl.FileDom, ns);
-            if (!parameters.Any())
+            if (parameters.Count == 0)
             {
                 return;
             }
@@ -43,7 +43,7 @@ namespace TeamTools.SSDT.ProjectValidator.Rules.Reports
             }
         }
 
-        private static ICollection<string> ExtractLinksToParameters(XDocument doc, XmlNamespaceManager ns)
+        private static HashSet<string> ExtractLinksToParameters(XDocument doc, XmlNamespaceManager ns)
         {
             var directLinks = doc.XPathSelectElements($"//{ReportsNamespace}:ParameterName", ns)
                     .Select(nd => nd.Value);
@@ -74,7 +74,7 @@ namespace TeamTools.SSDT.ProjectValidator.Rules.Reports
             return result;
         }
 
-        private static IDictionary<string, XElement> ExtractParameters(XDocument doc, XmlNamespaceManager ns)
+        private static Dictionary<string, XElement> ExtractParameters(XDocument doc, XmlNamespaceManager ns)
         {
             var nodes = doc.XPathSelectElements($"//{ReportsNamespace}:ReportParameters/{ReportsNamespace}:ReportParameter", ns);
             var result = nodes

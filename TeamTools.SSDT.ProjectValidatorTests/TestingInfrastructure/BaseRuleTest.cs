@@ -66,7 +66,7 @@ namespace TeamTools.SSDT.ProjectValidatorTests
             }
 
             string scriptPathFolder = Path.GetFullPath(Path.Combine(
-                TestContext.CurrentContext.WorkDirectory,
+                TestContext.CurrentContext.TestDirectory,
                 UnitTestsSubfolder,
                 ruleCategoryName,
                 ruleClassName,
